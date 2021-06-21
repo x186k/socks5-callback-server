@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -12,6 +13,7 @@ import (
 
 var _ = getDefRouteIntfAddrIPv6
 
+//from http://github.com/x186k/sfu1
 func getDefRouteIntfAddrIPv6() net.IP {
 	const googleDNSIPv6 = "[2001:4860:4860::8888]:8080" // not important, does not hit the wire
 	cc, err := net.Dial("udp6", googleDNSIPv6)          // doesnt send packets
@@ -40,10 +42,21 @@ func (h *DefaultHandle) UDPHandle(*socks5.Server, *net.UDPAddr, *socks5.Datagram
 	return fmt.Errorf("no udp support")
 }
 
+var ErrCallbacksOnly = errors.New("rejecting non-callback connect")
+
 // TCPHandle auto handle request. You may prefer to do yourself.
 func (h *DefaultHandle) TCPHandle(s *socks5.Server, c *net.TCPConn, r *socks5.Request) error {
 
-	println(r.Cmd,c.RemoteAddr().String(),r.Address())
+	//println(r.Cmd, c.RemoteAddr().String(), r.Address())
+
+	if r.Cmd == socks5.CmdConnect {
+		a := c.RemoteAddr().(*net.TCPAddr).IP
+		b := net.IP(r.DstAddr)
+		if !a.Equal(b) {
+			return ErrCallbacksOnly
+		}
+	}
+
 	if r.Cmd == socks5.CmdConnect {
 		rc, err := r.Connect(c)
 		if err != nil {
