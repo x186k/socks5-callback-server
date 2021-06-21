@@ -109,7 +109,7 @@ func main() {
 	myipv4 := getDefRouteIntfAddrIPv4()
 	if myipv4 != nil {
 
-		server := myipv4.String() + ":9999"
+		server := myipv4.String() + ":60000"
 
 		println(server)
 
