@@ -9,7 +9,7 @@ necessary ports are open or not when running an HTTP server.
 This can dramatically simplify the life of end-users who are not good at using Firewalls, port-forwarding, `telnet` and `curl` for checking whether TCP services are properly
 presenting outside the firewall.
 
-This server is restricted to limit it's usefulness: it only permits proxying TCP to same IP address as request is coming from. It really can't be used for much beyond checking if my firewall has
+This server is restricted to limit it's usefulness for hackers: it only permits proxying TCP to same IP address as request is coming from. It really can't be used for much beyond checking if my firewall has
 a port forwarded, and there is a listening TCP service on that port.
 
 You would general run this server on an affordable $5 or $10 virtual machine, that has a direct routable IP address on it's interfaces.
@@ -28,7 +28,7 @@ docker build -t x186k/socks5-callback-server .
 
 For non-detached testing:
 ```bash
-docker run --network host x186k/socks5-callback-server
+docker run -p 60000:60000 x186k/socks5-callback-server
 ```
 
 ## Upload to dockerhub:
@@ -46,7 +46,7 @@ ufw allow 60000/tcp
 
 For 24x7 service on a cloud provider instance:
 ```bash
-docker run --network host -d --restart unless-stopped x186k/socks5-callback-server
+docker run --name socks -p 60000:60000 -d --restart unless-stopped x186k/socks5-callback-server
 ```
 
 ## Testing

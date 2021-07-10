@@ -119,22 +119,24 @@ func (h *DefaultHandle) TCPHandle(s *socks5.Server, c *net.TCPConn, r *socks5.Re
 
 func main() {
 
-	myipv4 := getDefRouteIntfAddrIPv4()
-	if myipv4 != nil {
+	// myipv4 := getDefRouteIntfAddrIPv4()
+	// if myipv4 != nil {
+	//server := myipv4.String() + ":60000"
 
-		server := myipv4.String() + ":60000"
+	ip := "::"
+	addr := "[::]:60000"
 
-		println(server)
-
-		s, err := socks5.NewClassicServer(server, myipv4.String(), "", "", 10, 10)
-		if err != nil {
-			panic(err)
-		}
-		var z *DefaultHandle
-		err = s.ListenAndServe(z)
-		if err != nil {
-			panic(err)
-		}
+	// host:port from addr used
+	// just ip from ip used
+	s, err := socks5.NewClassicServer(addr, ip, "", "", 10, 10)
+	if err != nil {
+		panic(err)
 	}
+	var z *DefaultHandle
+	err = s.ListenAndServe(z)
+	if err != nil {
+		panic(err)
+	}
+	//	}
 
 }
