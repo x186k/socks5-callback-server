@@ -53,7 +53,7 @@ func (h *DefaultHandle) TCPHandle(s *socks5.Server, c *net.TCPConn, r *socks5.Re
 		a := c.RemoteAddr().(*net.TCPAddr).IP
 		b := net.IP(r.DstAddr)
 		if !a.Equal(b) {
-			return ErrCallbacksOnly
+			return fmt.Errorf("reject: remoteip: %s != request.ip: %s",a.String(),b.String())
 		}
 	}
 
