@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -25,15 +24,15 @@ func getDefRouteIntfAddrIPv6() net.IP {
 }
 
 //from http://github.com/x186k/sfu1
-func getDefRouteIntfAddrIPv4() net.IP {
-	const googleDNSIPv4 = "8.8.8.8:8080"       // not important, does not hit the wire
-	cc, err := net.Dial("udp4", googleDNSIPv4) // doesnt send packets
-	if err == nil {
-		cc.Close()
-		return cc.LocalAddr().(*net.UDPAddr).IP
-	}
-	return nil
-}
+// func getDefRouteIntfAddrIPv4() net.IP {
+// 	const googleDNSIPv4 = "8.8.8.8:8080"       // not important, does not hit the wire
+// 	cc, err := net.Dial("udp4", googleDNSIPv4) // doesnt send packets
+// 	if err == nil {
+// 		cc.Close()
+// 		return cc.LocalAddr().(*net.UDPAddr).IP
+// 	}
+// 	return nil
+// }
 
 type DefaultHandle struct {
 }
@@ -42,7 +41,7 @@ func (h *DefaultHandle) UDPHandle(*socks5.Server, *net.UDPAddr, *socks5.Datagram
 	return fmt.Errorf("no udp support")
 }
 
-var ErrCallbacksOnly = errors.New("rejecting non-callback connect")
+//var ErrCallbacksOnly = errors.New("rejecting non-callback connect")
 
 // TCPHandle auto handle request. You may prefer to do yourself.
 func (h *DefaultHandle) TCPHandle(s *socks5.Server, c *net.TCPConn, r *socks5.Request) error {
