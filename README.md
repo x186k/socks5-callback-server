@@ -38,16 +38,26 @@ docker login
 docker push x186k/socks5-callback-server:latest
 ```
 
-## Run using Docker in production 
-
-```
-ufw allow 60000/tcp
-```
+## Run using Docker in production for ipv4 only 
 
 For 24x7 service on a cloud provider instance:
 ```bash
+ufw allow 60000/tcp
 docker run --name socks -p 60000:60000 -d --restart unless-stopped x186k/socks5-callback-server
 ```
+
+## Run using Docker in production for ipv4 and ipv6
+
+For 24x7 service on a cloud provider instance: *using host networking*
+```bash
+ufw allow 60000/tcp
+docker run --network host --name socks -d --restart unless-stopped x186k/socks5-callback-server
+```
+
+You may be able to get ipv4,ipv6 working without using host networking,
+but you have to *[Enable ipv6 for the Docker daemon](https://docs.docker.com/config/daemon/ipv6/)*
+
+I've haven't tested this method of ipv6 support. Just host networking.
 
 ## Testing
 
